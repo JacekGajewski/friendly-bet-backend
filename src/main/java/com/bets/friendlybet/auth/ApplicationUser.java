@@ -1,10 +1,10 @@
 package com.bets.friendlybet.auth;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class ApplicationUser implements UserDetails {
@@ -16,10 +16,11 @@ public class ApplicationUser implements UserDetails {
     private final boolean isAccountNonLocked;
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
+    private final int user_id;
 
     public ApplicationUser(Set<? extends GrantedAuthority> grantedAuthorityList,
                            String password, String username, boolean isAccountNonExpired,
-                           boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled) {
+                           boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, int user_id) {
         this.grantedAuthorityList = grantedAuthorityList;
         this.password = password;
         this.username = username;
@@ -27,6 +28,7 @@ public class ApplicationUser implements UserDetails {
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
         this.isEnabled = isEnabled;
+        this.user_id = user_id;
     }
 
     @Override
@@ -62,5 +64,9 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public int getUser_id() {
+        return user_id;
     }
 }

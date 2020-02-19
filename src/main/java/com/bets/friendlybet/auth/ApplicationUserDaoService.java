@@ -43,8 +43,8 @@ public class ApplicationUserDaoService implements ApplicationUserDAO{
                         true,
                         true,
                         true,
-                        true
-                )).
+                        true,
+                        user.getId())).
                         collect(Collectors.toList());
         return collect;
     }

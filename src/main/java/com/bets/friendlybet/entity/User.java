@@ -20,6 +20,8 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<Authority> authorities;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private Set<Bet> bets;
 
     public User() {
     }
@@ -56,4 +58,11 @@ public class User {
         this.authorities = authorities;
     }
 
+    public Set<Bet> getBets() {
+        return bets;
+    }
+
+    public void setBets(Set<Bet> bets) {
+        this.bets = bets;
+    }
 }

@@ -1,5 +1,6 @@
 package com.bets.friendlybet.jwt;
 
+import com.bets.friendlybet.auth.ApplicationUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -36,7 +37,7 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
-        try{
+        try {
             UsernameAndPasswordAuthRequest authRequest = new ObjectMapper().readValue(request.getInputStream(),
                     UsernameAndPasswordAuthRequest.class);
 
@@ -47,7 +48,7 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
 
             Authentication authenticate = authenticationManager.authenticate(authentication);
             return authenticate;
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -57,11 +58,13 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
                                             HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
+        Integer userId = ((ApplicationUser) authResult.getPrincipal()).getUser_id();
         String key = "secuhukgfhjlkhkghfxghfhkjlghdfhdghkgfkfxjgrxktyvkhgvlutfjyrzjyrxlutltxykzreKey9&";
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
 //                .setIssuedAt(new Date())
+                .claim("userId", userId)
 //                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
 //                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
 //                .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
@@ -70,6 +73,7 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
 // TODO Store tokes in database for a users
 
         response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("UserId", userId.toString());
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 //        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));

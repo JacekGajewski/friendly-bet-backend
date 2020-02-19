@@ -38,6 +38,11 @@ public class Bet {
     @Column(name = "value")
     private String value;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     public int getBet_id() {
         return bet_id;
     }
@@ -68,5 +73,13 @@ public class Bet {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
