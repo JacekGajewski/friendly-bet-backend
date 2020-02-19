@@ -2,7 +2,6 @@ package com.bets.friendlybet.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 
 import javax.persistence.*;
 
@@ -27,8 +26,8 @@ public class Bet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_test")
-    private int id_test;
+    @Column(name = "bet_id")
+    private int bet_id;
 
     @Column(name = "title")
     private String title;
@@ -39,12 +38,12 @@ public class Bet {
     @Column(name = "value")
     private String value;
 
-    public int getId_test() {
-        return id_test;
+    public int getBet_id() {
+        return bet_id;
     }
 
-    public void setId_test(int id_test) {
-        this.id_test = id_test;
+    public void setBet_id(int bet_id) {
+        this.bet_id = bet_id;
     }
 
     public String getTitle() {
