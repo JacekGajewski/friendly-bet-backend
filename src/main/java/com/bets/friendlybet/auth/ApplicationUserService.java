@@ -21,8 +21,6 @@ public class ApplicationUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser user = APPLICATION_USER_DAO.selectApplicationUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        UserHolder userHolder = new UserHolderImpl();
-        userHolder.setId(user.getUser_id());
         return user;
     }
 }

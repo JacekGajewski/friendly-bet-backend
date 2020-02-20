@@ -13,4 +13,5 @@ public class FriendlyBetApplication {
 		SpringApplication.run(FriendlyBetApplication.class, args);
 	}
 
+//	TODO: Block creating users with id 0. When creatorId/RivalId is null, id 0 is assigned
 }

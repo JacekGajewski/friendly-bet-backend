@@ -1,5 +1,7 @@
 package com.bets.friendlybet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,10 +20,16 @@ public class User {
     private String  password;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
     private Set<Authority> authorities;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<Bet> bets;
+    @OneToMany(mappedBy = "betCreator")
+    @JsonIgnore
+    private Set<Bet> betsCreated;
+
+    @OneToMany(mappedBy = "betRival")
+    @JsonIgnore
+    private Set<Bet> betsAccepted;
 
     public User() {
     }
@@ -58,11 +66,19 @@ public class User {
         this.authorities = authorities;
     }
 
-    public Set<Bet> getBets() {
-        return bets;
+    public Set<Bet> getBetsCreated() {
+        return betsCreated;
     }
 
-    public void setBets(Set<Bet> bets) {
-        this.bets = bets;
+    public void setBetsCreated(Set<Bet> betsCreated) {
+        this.betsCreated = betsCreated;
+    }
+
+    public Set<Bet> getBetsAccepted() {
+        return betsAccepted;
+    }
+
+    public void setBetsAccepted(Set<Bet> betsAccepted) {
+        this.betsAccepted = betsAccepted;
     }
 }

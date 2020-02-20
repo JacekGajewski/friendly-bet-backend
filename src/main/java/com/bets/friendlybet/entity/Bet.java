@@ -10,20 +10,6 @@ import javax.persistence.*;
 @Table(name = "Bet")
 public class Bet {
 
-    public Bet() {
-    }
-
-    public Bet(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public Bet(String title, String content, String value) {
-        this.title = title;
-        this.content = content;
-        this.value = value;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bet_id")
@@ -38,10 +24,49 @@ public class Bet {
     @Column(name = "value")
     private String value;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "status")
+    private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "bet_creator")
+    private User betCreator;
+
+    @ManyToOne
+    @JoinColumn(name = "bet_rival")
+    private User betRival;
+
+    public Bet() {
+    }
+
+    public Bet(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public Bet(String title, String content, String value) {
+        this.title = title;
+        this.content = content;
+        this.value = value;
+    }
+
+    public Bet(String title, String content, String value, String status, User betCreator, User betRival) {
+        this.title = title;
+        this.content = content;
+        this.value = value;
+        this.status = status;
+        this.betCreator = betCreator;
+        this.betRival = betRival;
+    }
+
+    public Bet(int bet_id, String title, String content, String value, String status, User betCreator, User betRival) {
+        this.bet_id = bet_id;
+        this.title = title;
+        this.content = content;
+        this.value = value;
+        this.status = status;
+        this.betCreator = betCreator;
+        this.betRival = betRival;
+    }
 
     public int getBet_id() {
         return bet_id;
@@ -75,11 +100,27 @@ public class Bet {
         this.value = value;
     }
 
-    public User getUser() {
-        return user;
+    public User getBetCreator() {
+        return betCreator;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setBetCreator(User betCreator) {
+        this.betCreator = betCreator;
+    }
+
+    public User getBetRival() {
+        return betRival;
+    }
+
+    public void setBetRival(User betRival) {
+        this.betRival = betRival;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

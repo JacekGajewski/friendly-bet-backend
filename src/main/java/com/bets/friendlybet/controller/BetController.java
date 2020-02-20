@@ -1,10 +1,7 @@
 package com.bets.friendlybet.controller;
 
-import com.bets.friendlybet.entity.Bet;
-import com.bets.friendlybet.repository.BetRepository;
+import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.service.BetService;
-import com.bets.friendlybet.service.BetServiceImpl;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,24 +16,37 @@ public class BetController {
         this.betService = betService;
     }
 
-    @GetMapping("/bets")
+    @GetMapping("/users/{userId}/bets")
     public @ResponseBody
-    List<Bet> getBets(){
-        return betService.getAllBets();
+    List<BetDTO> getBets(@PathVariable int userId) {
+        return betService.getAllBets(userId);
     }
 
-    @GetMapping("/bets/{id}")
-    public @ResponseBody Bet getBet(@PathVariable int id){
-        return betService.getBet(id);
+    @GetMapping("/bets/{betId}")
+    public @ResponseBody
+    BetDTO getBet(@PathVariable int betId) {
+        return betService.getBet(betId);
+    }
+
+    @GetMapping("/bets/{userId}/{betStatus}")
+    public @ResponseBody
+    List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {
+        return betService.getBetsByStatus(userId, betStatus);
+    }
+
+    @PutMapping("/bets")
+    public @ResponseBody
+    BetDTO updateBet(@RequestBody BetDTO bet) {
+        return betService.updateBet(bet);
     }
 
     @PostMapping("/bets")
-    public Bet saveBet(@RequestBody Bet newBet){
+    public BetDTO saveBet(@RequestBody BetDTO newBet) {
         return betService.saveBet(newBet);
     }
 
     @DeleteMapping("/bets/{id}")
-    public void deleteBet(@PathVariable int id){
+    public void deleteBet(@PathVariable int id) {
         betService.deleteBet(id);
     }
 }
