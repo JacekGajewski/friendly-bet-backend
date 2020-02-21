@@ -1,6 +1,8 @@
 package com.bets.friendlybet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private Integer id;
 
@@ -21,18 +23,33 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "betCreator")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Set<Bet> betsCreated;
 
     @OneToMany(mappedBy = "betRival")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Set<Bet> betsAccepted;
 
     public User() {
     }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
 
     public Integer getId() {
         return id;

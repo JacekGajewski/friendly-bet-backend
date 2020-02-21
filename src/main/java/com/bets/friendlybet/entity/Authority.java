@@ -2,6 +2,8 @@ package com.bets.friendlybet.entity;
 
 
 import com.bets.friendlybet.security.UserRole;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -10,7 +12,7 @@ import javax.persistence.*;
 public class Authority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "authority_id")
     private Integer id;
 
@@ -23,6 +25,11 @@ public class Authority {
     private User user;
 
     public Authority() {
+    }
+
+    public Authority(UserRole name, User user) {
+        this.name = name;
+        this.user = user;
     }
 
     public Integer getId() {

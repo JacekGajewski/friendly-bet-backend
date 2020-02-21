@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Bet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "bet_id")
     private int bet_id;
 
