@@ -16,9 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.Date;
 
 public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -74,9 +71,9 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
 
         response.addHeader("Authorization", "Bearer " + token);
         response.addHeader("UserId", userId.toString());
+        response.addHeader("ExpiresIn", jwtConfig.getTokenExpirationAfterDays().toString());
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-//        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");

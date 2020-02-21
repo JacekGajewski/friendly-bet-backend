@@ -50,7 +50,9 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public BetDTO saveBet(BetDTO newBet) {
-        return betEntityToBetDto(betRepository.save(betDtoToBetEntity(newBet)));
+        Bet s = betDtoToBetEntity(newBet);
+        Bet save = betRepository.save(s);
+        return betEntityToBetDto(save);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class BetServiceImpl implements BetService {
     }
 
     private Bet betDtoToBetEntity(BetDTO betDTO) {
-        return new Bet(
+        Bet bet = new Bet(
                 betDTO.getBetId(),
                 betDTO.getTitle(),
                 betDTO.getContent(),
@@ -67,6 +69,7 @@ public class BetServiceImpl implements BetService {
                 betDTO.getStatus(),
                 userService.getUser(betDTO.getCreatorId()),
                 userService.getUser(betDTO.getRivalName()));
+        return bet;
     }
 
     private BetDTO betEntityToBetDto(Bet betEntity) {

@@ -47,11 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernamePasswordAuthFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernamePasswordAuthFilter.class)
                 .authorizeRequests()
-                .antMatchers("/", "index", "bets", "betss", "/css/*", "/js/*").permitAll()
-                .antMatchers("/login").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
+                    .antMatchers("/", "index", "/bets", "/users", "/css/*", "/js/*")
+                    .permitAll()
+                    .and()
+                .authorizeRequests()
+                    .antMatchers("/login")
+                    .permitAll()
+                    .and()
+                .authorizeRequests()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
                 .httpBasic();
 //                .loginPage("/login")
 //                .defaultSuccessUrl("/bets", true);
@@ -79,9 +85,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "DELETE", "OPTION", "PUT"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type","UserId", "Access-Control-Allow-Origin"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type", "UserId", "Access-Control-Allow-Origin"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTION", "PUT"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type", "UserId", "Access-Control-Allow-Origin", "ExpiresIn"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type", "UserId", "Access-Control-Allow-Origin", "ExpiresIn"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
