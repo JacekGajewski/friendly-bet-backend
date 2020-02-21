@@ -2,12 +2,17 @@ package com.bets.friendlybet.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "Bet")
+@Getter
+@Setter
 public class Bet {
 
     @Id
@@ -66,61 +71,5 @@ public class Bet {
         this.status = status;
         this.betCreator = betCreator;
         this.betRival = betRival;
-    }
-
-    public int getBet_id() {
-        return bet_id;
-    }
-
-    public void setBet_id(int bet_id) {
-        this.bet_id = bet_id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public User getBetCreator() {
-        return betCreator;
-    }
-
-    public void setBetCreator(User betCreator) {
-        this.betCreator = betCreator;
-    }
-
-    public User getBetRival() {
-        return betRival;
-    }
-
-    public void setBetRival(User betRival) {
-        this.betRival = betRival;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

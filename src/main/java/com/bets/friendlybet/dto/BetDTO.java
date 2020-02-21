@@ -1,5 +1,11 @@
 package com.bets.friendlybet.dto;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BetDTO {
 
     private int betId;
@@ -18,61 +24,5 @@ public class BetDTO {
         this.status = status;
         this.creatorId = creatorId;
         this.rivalName = rivalName;
-    }
-
-    public int getBetId() {
-        return betId;
-    }
-
-    public void setBetId(int betId) {
-        this.betId = betId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public int getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(int creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public String getRivalName() {
-        return rivalName;
-    }
-
-    public void setRivalName(String rivalName) {
-        this.rivalName = rivalName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

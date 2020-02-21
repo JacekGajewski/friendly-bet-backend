@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorityServiceImpl implements AuthorityService{
 
-    AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     public AuthorityServiceImpl(AuthorityRepository authorityRepository) {

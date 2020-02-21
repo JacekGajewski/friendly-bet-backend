@@ -1,6 +1,9 @@
 package com.bets.friendlybet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,6 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -48,54 +53,5 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public Set<Bet> getBetsCreated() {
-        return betsCreated;
-    }
-
-    public void setBetsCreated(Set<Bet> betsCreated) {
-        this.betsCreated = betsCreated;
-    }
-
-    public Set<Bet> getBetsAccepted() {
-        return betsAccepted;
-    }
-
-    public void setBetsAccepted(Set<Bet> betsAccepted) {
-        this.betsAccepted = betsAccepted;
     }
 }

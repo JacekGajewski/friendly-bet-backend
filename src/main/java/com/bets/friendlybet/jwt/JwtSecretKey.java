@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 
 @Configuration
 public class JwtSecretKey {
