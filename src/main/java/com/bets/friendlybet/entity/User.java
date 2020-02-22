@@ -26,10 +26,10 @@ public class User {
     @Column(name = "password")
     private String  password;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "id.user")
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Authority> authorities;
+    private Set<UsersAuthorities> authorities;
 
     @OneToMany(mappedBy = "betCreator")
     @JsonIgnore

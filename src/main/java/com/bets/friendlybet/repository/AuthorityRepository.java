@@ -9,5 +9,4 @@ public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
 
     Authority getByName(UserRole role);
 
-    void deleteAllByUser(User user);
 }

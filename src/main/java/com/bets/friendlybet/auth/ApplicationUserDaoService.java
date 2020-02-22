@@ -30,7 +30,7 @@ public class ApplicationUserDaoService implements ApplicationUserDAO{
         List<ApplicationUser> collect = userRepository.findAll().stream()
                 .map(user -> new ApplicationUser(
                         user.getAuthorities().stream()
-                                .map(authority -> authority.getName().getGrantedAuthorities())
+                                .map(authority -> authority.getId().getAuthority().getName().getGrantedAuthorities())
                                 .flatMap(Set::stream)
                                 .collect(Collectors.toSet()),
                         passwordEncoder.encode(user.getPassword()),

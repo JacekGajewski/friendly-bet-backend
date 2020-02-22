@@ -2,6 +2,7 @@ package com.bets.friendlybet.entity;
 
 
 import com.bets.friendlybet.security.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "authority")
@@ -25,16 +27,17 @@ public class Authority {
     @Column(name = "name")
     private UserRole name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "id.authority")
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private Set<UsersAuthorities> usersAuthorities;
 
     public Authority() {
     }
 
-    public Authority(UserRole name, User user) {
+    public Authority(UserRole name, Set<UsersAuthorities> usersAuthorities) {
         this.name = name;
-        this.user = user;
+        this.usersAuthorities = usersAuthorities;
     }
 }
 
