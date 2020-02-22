@@ -1,26 +1,13 @@
 package com.bets.friendlybet.jwt;
 
-public class UsernameAndPasswordAuthRequest {
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+class UsernameAndPasswordAuthRequest {
 
     private String username;
     private String password;
 
-    public UsernameAndPasswordAuthRequest() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

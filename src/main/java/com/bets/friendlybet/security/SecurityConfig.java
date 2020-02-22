@@ -4,6 +4,7 @@ import com.bets.friendlybet.auth.ApplicationUserService;
 import com.bets.friendlybet.jwt.JwtConfig;
 import com.bets.friendlybet.jwt.JwtTokenVerifier;
 import com.bets.friendlybet.jwt.JwtUsernamePasswordAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,19 +24,14 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PasswordEncoder PASSWORD_ENCODER;
-    private final ApplicationUserService APPLICATION_USER_SERVICE;
+    private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
-    public SecurityConfig(PasswordEncoder password_encoder, ApplicationUserService application_user_service, SecretKey secretKey, JwtConfig jwtConfig) {
-        PASSWORD_ENCODER = password_encoder;
-        APPLICATION_USER_SERVICE = application_user_service;
-        this.secretKey = secretKey;
-        this.jwtConfig = jwtConfig;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -76,8 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(PASSWORD_ENCODER);
-        provider.setUserDetailsService(APPLICATION_USER_SERVICE);
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
         return provider;
     }
 

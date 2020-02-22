@@ -13,7 +13,7 @@ public class BetDTO {
     private int creatorId;
     private String rivalName;
 
-    public BetDTO(int betId, String title, String content, String value, String status, int creatorId, String rivalName) {
+    BetDTO(int betId, String title, String content, String value, String status, int creatorId, String rivalName) {
         this.betId = betId;
         this.title = title;
         this.content = content;

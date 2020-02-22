@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class BetServiceImpl implements BetService {
 
-    private BetRepository betRepository;
+    private final BetRepository betRepository;
     private UserRepository userRepository;
     private MapperDTO mapperDTO;
 
