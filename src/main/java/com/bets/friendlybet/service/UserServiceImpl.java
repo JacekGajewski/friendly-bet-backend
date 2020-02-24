@@ -1,31 +1,26 @@
 package com.bets.friendlybet.service;
 
 import com.bets.friendlybet.dto.UserDTO;
-import com.bets.friendlybet.entity.Authority;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.repository.UserRepository;
-import com.bets.friendlybet.security.UserRole;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.bets.friendlybet.security.UserRole.*;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private AuthorityService  authorityService;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, AuthorityService authorityService) {
-        this.userRepository = userRepository;
-        this.authorityService = authorityService;
-    }
+    private final UserRepository userRepository;
+    private final AuthorityService  authorityService;
+    private final BetService betService;
+    private final UsersAuthoritiesService usersAuthoritiesService;
 
     @Override
     public List<User> getAllUsers() {
@@ -48,7 +43,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void createUser(UserDTO user) {
         User newUser = userDtoToUserEntity(user);
         authorityService.createAuthority(STUDENT, userRepository.save(newUser));
@@ -56,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int userId) {
+        betService.deleteUserFromBets(userId);
+        usersAuthoritiesService.deleteUserAuthorities(userId);
         userRepository.deleteById(userId);
     }
 

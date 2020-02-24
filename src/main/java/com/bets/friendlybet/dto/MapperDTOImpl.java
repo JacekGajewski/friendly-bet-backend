@@ -1,6 +1,7 @@
 package com.bets.friendlybet.dto;
 
 import com.bets.friendlybet.entity.Bet;
+import com.bets.friendlybet.repository.UserRepository;
 import com.bets.friendlybet.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MapperDTOImpl implements MapperDTO{
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     public Bet betDtoToBetEntity(BetDTO betDTO) {
         return new Bet(
@@ -21,9 +22,10 @@ public class MapperDTOImpl implements MapperDTO{
                 betDTO.getContent(),
                 betDTO.getValue(),
                 betDTO.getStatus(),
-                userService.getUser(betDTO.getCreatorId()),
-                userService.getUser(betDTO.getRivalName()));
+                userRepository.findById(betDTO.getCreatorId()).orElse(null),
+                userRepository.findUserByUsername(betDTO.getRivalName()));
     }
+//    TODO: Injection circle
 
     public BetDTO betEntityToBetDto(Bet betEntity) {
         BetDTO betDTO = new BetDTO(

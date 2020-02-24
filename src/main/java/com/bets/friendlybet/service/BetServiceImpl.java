@@ -61,4 +61,16 @@ public class BetServiceImpl implements BetService {
     public void deleteBet(int id) {
         betRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteUserFromBets(int userId) {
+        betRepository.deleteUserFromCreator(userId);
+        betRepository.deleteUserFromRival(userId);
+        deleteBetIfItIsNotAttached();
+    }
+
+    @Override
+    public void deleteBetIfItIsNotAttached() {
+        betRepository.deleteBetIfItIsNotAttached();
+    }
 }
