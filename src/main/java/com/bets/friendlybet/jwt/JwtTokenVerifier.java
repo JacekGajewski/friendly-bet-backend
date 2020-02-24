@@ -54,9 +54,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                     .map(m -> new SimpleGrantedAuthority(m.get("authority")))
                     .collect(Collectors.toSet());
 
+//            UserId stored as a credential in authentication
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     username,
-                    null,
+                    body.get("userId"),
                     simpleGrantedAuthorities
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);

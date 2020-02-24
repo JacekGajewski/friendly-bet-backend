@@ -14,7 +14,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -43,18 +44,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernamePasswordAuthFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernamePasswordAuthFilter.class)
                 .authorizeRequests()
-                    .antMatchers("/", "index", "/bets", "/users", "/css/*", "/js/*")
+                .antMatchers("/", "index", "/login", "/css/*", "/js/*")
                     .permitAll()
-                    .and()
-                .authorizeRequests()
-                    .antMatchers("/login")
-                    .permitAll()
-                    .and()
-                .authorizeRequests()
-                    .anyRequest()
-                    .authenticated()
-                    .and()
-                .httpBasic();
+                .antMatchers("/users/{userId}/**", "/bets/{userId}/**")
+                    .access("@webSecurity.checkUserId(authentication,#userId)")
+                .antMatchers("/bets/**")
+                    .hasRole("STUDENT")
+                .antMatchers("/users", "/users/**")
+                    .hasRole("ADMIN")
+                .anyRequest()
+                .authenticated();
+//                    .and()
+//                .authorizeRequests()
+//                    .anyRequest()
+//                    .authenticated()
+//                    .and()
+//                .httpBasic();
 //                .loginPage("/login")
 //                .defaultSuccessUrl("/bets", true);
 //                .loginPage("/login").permitAll()
@@ -87,5 +92,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+}
+
+@Component
+class WebSecurity {
+    public boolean checkUserId(Authentication authentication, int id) {
+        return ((Integer) authentication.getCredentials()).equals(id);
     }
 }
