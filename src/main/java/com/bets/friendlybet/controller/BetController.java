@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
+@RequestMapping("user/{userId}")
 public class BetController {
 
     private BetService betService;
@@ -16,7 +16,7 @@ public class BetController {
         this.betService = betService;
     }
 
-    @GetMapping("/users/{userId}/bets")
+    @GetMapping("bets")
     public @ResponseBody
     List<BetDTO> getBets(@PathVariable int userId) {
         return betService.getAllBets(userId);
@@ -28,7 +28,7 @@ public class BetController {
         return betService.getBet(betId);
     }
 
-    @GetMapping("/bets/{userId}/{betStatus}")
+    @GetMapping("/bets/status/{betStatus}")
     public @ResponseBody
     List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {
         return betService.getBetsByStatus(userId, betStatus);

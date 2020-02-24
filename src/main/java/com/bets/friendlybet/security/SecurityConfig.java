@@ -7,6 +7,7 @@ import com.bets.friendlybet.jwt.JwtUsernamePasswordAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -46,12 +47,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/login", "/css/*", "/js/*")
                     .permitAll()
-                .antMatchers("/users/{userId}/**", "/bets/{userId}/**")
-                    .access("@webSecurity.checkUserId(authentication,#userId)")
-                .antMatchers("/bets/**")
-                    .hasRole("STUDENT")
-                .antMatchers("/users", "/users/**")
+                .antMatchers("/user/{userId}/**")
+                    .access("(@webSecurity.checkUserId(authentication,#userId) AND hasRole('STUDENT')) OR hasRole('ADMIN')")
+                .antMatchers(HttpMethod.GET, "/users", "/users/**")
                     .hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users", "/users/**")
+                    .hasAnyRole("STUDENT","ADMIN")
+                .antMatchers(HttpMethod.PUT, "/users/{userId}")
+                    .access("@webSecurity.checkUserId(authentication,#userId) AND hasAnyRole('STUDENT', 'ADMIN')")
+                .antMatchers(HttpMethod.DELETE, "/users/{userId}")
+                    .access("@webSecurity.checkUserId(authentication,#userId) AND hasAnyRole('STUDENT', 'ADMIN')")
                 .anyRequest()
                 .authenticated();
 //                    .and()
