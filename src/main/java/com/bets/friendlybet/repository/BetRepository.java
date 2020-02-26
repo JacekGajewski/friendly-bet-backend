@@ -13,10 +13,6 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
 
     List<Bet> getAllByBetCreatorOrBetRival(User creator, User rival);
 
-    List<Bet> getAllByBetCreatorOrBetRivalAndStatus(User creator, User rival, String status);
-
-    List<Bet> getByStatusAndBetCreatorOrBetRival(String status, User creator, User rival);
-
     List<Bet> findByStatusAndBetCreatorOrStatusAndBetRival(String status, User creator, String theStatus, User rival);
 
     @Modifying
@@ -28,6 +24,18 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
     void deleteUserFromRival(@Param("userId") int userId);
 
     @Modifying
+    @Query("UPDATE Bet SET bet_creator = null WHERE bet_id = :betId AND bet_creator = :userId")
+    void deleteUserFromCreatorForBet(@Param("userId") int userId, @Param("betId") int betId);
+
+    @Modifying
+    @Query("UPDATE Bet SET bet_rival = null WHERE bet_id = :betId AND bet_rival = :userId")
+    void deleteUserFromRivalForBet(@Param("userId") int userId, @Param("betId") int betId);
+
+    @Modifying
+    @Query("DELETE FROM Bet WHERE bet_id = :betId AND bet_creator = null AND bet_rival = null")
+    void deleteBetIfItIsNotAttached(@Param("betId") int betId);
+
+    @Modifying
     @Query("DELETE FROM Bet WHERE bet_creator = null AND bet_rival = null")
-    void deleteBetIfItIsNotAttached();
+    void deleteBetsIfItIsNotAttached();
 }

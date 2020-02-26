@@ -1,7 +1,6 @@
 package com.bets.friendlybet.service;
 
 import com.bets.friendlybet.dto.BetDTO;
-import com.bets.friendlybet.entity.User;
 
 import java.util.List;
 
@@ -17,9 +16,11 @@ public interface BetService {
 
     BetDTO saveBet(BetDTO newBet);
 
-    void deleteBet(int id);
+    void deleteBet(int userId, int betId);
+
+    void deleteUserFromBet(int userId, int betId);
 
     void deleteUserFromBets(int userId);
 
-    void deleteBetIfItIsNotAttached();
+    void deleteBetsIfItIsNotAttached();
 }

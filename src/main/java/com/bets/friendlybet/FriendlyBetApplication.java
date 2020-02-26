@@ -14,6 +14,8 @@ public class FriendlyBetApplication {
 	}
 
 //	TODO: 1) Block creating users with id 0. When creatorId/RivalId is null, id 0 is assigned.
-//		  2) Secure endpoints in a way that user cannot see other users bets.
-//		  3) When one user deletes a bet check if there is no other user attached to this bet.
+//		  2) When one user deletes a bet check if there is no other user attached to this bet.
+//		  3) Required, unique etc. for Entities
+//	      4) Validation
+//		  5) Tests
 }

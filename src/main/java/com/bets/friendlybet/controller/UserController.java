@@ -24,7 +24,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-//    TODO: Update account for a user, not only admin, but not other users
     @PutMapping(path = "/{userId}")
     public void updateUser(@RequestBody UserDTO user){
         userService.updateUser(user);

@@ -45,8 +45,8 @@ public class BetController {
         return betService.saveBet(newBet);
     }
 
-    @DeleteMapping("/bets/{id}")
-    public void deleteBet(@PathVariable int id) {
-        betService.deleteBet(id);
+    @DeleteMapping("/bets/{betId}")
+    public void deleteBet(@PathVariable int userId, @PathVariable int betId) {
+        betService.deleteBet(userId, betId);
     }
 }

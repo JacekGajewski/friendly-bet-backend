@@ -13,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class BetServiceImpl implements BetService {
 
-    private final BetRepository betRepository;
+    private BetRepository betRepository;
     private UserRepository userRepository;
     private MapperDTO mapperDTO;
 
@@ -38,7 +39,6 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    @Transactional
     public List<BetDTO> getBetsByStatus(int userId, String status) {
         User user = userRepository.findById(userId).orElse(null);
         return mapperDTO.betEntityListToBetDtoList(
@@ -54,23 +54,33 @@ public class BetServiceImpl implements BetService {
     public BetDTO saveBet(BetDTO newBet) {
         Bet s = mapperDTO.betDtoToBetEntity(newBet);
         Bet save = betRepository.save(s);
-        return mapperDTO.betEntityToBetDto(save);
+        BetDTO betDTO = mapperDTO.betEntityToBetDto(save);
+        return betDTO;
+
     }
 
     @Override
-    public void deleteBet(int id) {
-        betRepository.deleteById(id);
+    public void deleteBet(int userId, int betId) {
+        deleteUserFromBet(userId, betId);
+        betRepository.deleteBetIfItIsNotAttached(betId);
+    }
+
+    @Override
+    public void deleteUserFromBet(int userId, int betId) {
+        betRepository.deleteUserFromCreatorForBet(userId, betId);
+        betRepository.deleteUserFromRivalForBet(userId, betId);
+        deleteBetsIfItIsNotAttached();
     }
 
     @Override
     public void deleteUserFromBets(int userId) {
         betRepository.deleteUserFromCreator(userId);
         betRepository.deleteUserFromRival(userId);
-        deleteBetIfItIsNotAttached();
+        deleteBetsIfItIsNotAttached();
     }
 
     @Override
-    public void deleteBetIfItIsNotAttached() {
-        betRepository.deleteBetIfItIsNotAttached();
+    public void deleteBetsIfItIsNotAttached() {
+        betRepository.deleteBetsIfItIsNotAttached();
     }
 }
