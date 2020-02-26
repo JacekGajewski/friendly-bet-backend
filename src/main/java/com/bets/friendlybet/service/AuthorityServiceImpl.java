@@ -6,20 +6,17 @@ import com.bets.friendlybet.entity.UserAuthoritiesId;
 import com.bets.friendlybet.entity.UsersAuthorities;
 import com.bets.friendlybet.repository.AuthorityRepository;
 import com.bets.friendlybet.security.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class AuthorityServiceImpl implements AuthorityService{
 
-    private AuthorityRepository authorityRepository;
-    private UsersAuthoritiesService usersAuthoritiesService;
-
-    @Autowired
-    public AuthorityServiceImpl(AuthorityRepository authorityRepository, UsersAuthoritiesService usersAuthoritiesService) {
-        this.authorityRepository = authorityRepository;
-        this.usersAuthoritiesService = usersAuthoritiesService;
-    }
+    private final AuthorityRepository authorityRepository;
+    private final UsersAuthoritiesService usersAuthoritiesService;
 
     @Override
     public Authority getAuthority(UserRole role) {

@@ -4,7 +4,6 @@ import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

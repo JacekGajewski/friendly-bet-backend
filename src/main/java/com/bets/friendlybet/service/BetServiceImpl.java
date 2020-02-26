@@ -6,7 +6,7 @@ import com.bets.friendlybet.entity.Bet;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.repository.BetRepository;
 import com.bets.friendlybet.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,18 +14,12 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BetServiceImpl implements BetService {
 
-    private BetRepository betRepository;
-    private UserRepository userRepository;
-    private MapperDTO mapperDTO;
-
-    @Autowired
-    public BetServiceImpl(BetRepository betRepository, UserRepository userRepository, MapperDTO mapperDTO) {
-        this.betRepository = betRepository;
-        this.userRepository = userRepository;
-        this.mapperDTO = mapperDTO;
-    }
+    private final BetRepository betRepository;
+    private final UserRepository userRepository;
+    private final MapperDTO mapperDTO;
 
     @Override
     public List<BetDTO> getAllBets(int userId) {
@@ -54,9 +48,7 @@ public class BetServiceImpl implements BetService {
     public BetDTO saveBet(BetDTO newBet) {
         Bet s = mapperDTO.betDtoToBetEntity(newBet);
         Bet save = betRepository.save(s);
-        BetDTO betDTO = mapperDTO.betEntityToBetDto(save);
-        return betDTO;
-
+        return mapperDTO.betEntityToBetDto(save);
     }
 
     @Override
