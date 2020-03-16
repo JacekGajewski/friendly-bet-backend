@@ -35,6 +35,10 @@ public class Authority {
     public Authority() {
     }
 
+    public Authority(UserRole name) {
+        this.name = name;
+    }
+
     public Authority(UserRole name, Set<UsersAuthorities> usersAuthorities) {
         this.name = name;
         this.usersAuthorities = usersAuthorities;

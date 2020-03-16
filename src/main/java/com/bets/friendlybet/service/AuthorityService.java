@@ -12,4 +12,6 @@ public interface AuthorityService {
 
     void deleteAuthorities(int userId);
 
+    void doShit();
+
 }

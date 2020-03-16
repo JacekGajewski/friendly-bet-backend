@@ -1,7 +1,10 @@
 package com.bets.friendlybet.service;
 
+import com.bets.friendlybet.dto.PasswordDTO;
 import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.entity.User;
+import com.bets.friendlybet.exception.ApiRequestException;
+import com.bets.friendlybet.exception.BadPasswordException;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(int userId) {
-        return userRepository.findById(userId).orElse(null);
+        return userRepository.findById(userId).orElseThrow(() -> new ApiRequestException("DUPA"));
     }
 
     @Override
@@ -42,7 +45,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changePassword(int userId, PasswordDTO passwordDTO) {
+        User user = getUser(userId);
+        if (!user.getPassword().equals(passwordDTO.getOldPassword())){
+            throw new BadPasswordException("Wrong password");
+        }
+        user.setPassword(passwordDTO.getNewPassword());
+    }
+
+    @Override
+    public void changeUsername(int userId, String newUsername) {
+        User user = getUser(userId);
+        user.setUsername(newUsername);
+    }
+
+    @Override
     public void createUser(UserDTO user) {
+        authorityService.doShit();
         User newUser = userDtoToUserEntity(user);
         authorityService.createAuthority(STUDENT, userRepository.save(newUser));
     }

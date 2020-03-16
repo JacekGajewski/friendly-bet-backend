@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.bets.friendlybet.security.UserRole.ADMIN;
+import static com.bets.friendlybet.security.UserRole.STUDENT;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class AuthorityServiceImpl implements AuthorityService{
                 authorityRepository.getByName(userRole)
         );
         UsersAuthorities usersAuthorities = new UsersAuthorities(
-               userAuthoritiesId
+                userAuthoritiesId
         );
         usersAuthoritiesService.save(usersAuthorities);
     }
@@ -39,5 +42,14 @@ public class AuthorityServiceImpl implements AuthorityService{
     @Override
     public void deleteAuthorities(int userId) {
 
+    }
+
+    @Override
+    public void doShit() {
+        if (authorityRepository.getByName(STUDENT) != null){
+            return;
+        }
+        authorityRepository.save(new Authority(STUDENT));
+        authorityRepository.save(new Authority(ADMIN));
     }
 }
