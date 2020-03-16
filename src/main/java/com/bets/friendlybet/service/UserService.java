@@ -20,5 +20,4 @@ public interface UserService {
     void deleteUser(int userId);
 
     int getUserId(String username);
-
 }
