@@ -5,8 +5,10 @@ import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,37 +27,38 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping(path = "/{userId}")
+    @ResponseBody
+    public User getUser(@PathVariable int userId) {
+        return userService.getUser(userId);
+    }
+
     //    If you want to lock the user for some time after number of tries you should change PUT to POST
     @PutMapping(path = "/{userId}")
-    public void updateUser(@RequestBody UserDTO user){
+    public void updateUser(@Valid @RequestBody UserDTO user) {
         userService.updateUser(user);
     }
 
-    @PatchMapping(path = "/password/{userId}")
+    @PatchMapping(path = "/{userId}/password")
     public void changePassword(@PathVariable int userId,
-                               @RequestBody PasswordDTO passwordDTO) {
+                               @Valid @RequestBody PasswordDTO passwordDTO) {
         userService.changePassword(userId, passwordDTO);
     }
 
-    @PatchMapping(path = "/username/{userId}")
+    @PatchMapping(path = "/{userId}/username")
     public void changeUsername(@PathVariable int userId,
-                               @RequestParam(value="new-username") String newUsername) {
+                               @RequestParam(value = "new-username") String newUsername) {
         userService.changeUsername(userId, newUsername);
     }
 
     @PostMapping
-    public void createUser(@RequestBody UserDTO user){
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createUser(@Valid @RequestBody UserDTO user) {
         userService.createUser(user);
     }
 
     @DeleteMapping(path = "/{userId}")
-    public void deleteUser(@PathVariable int userId){
+    public void deleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
-    }
-
-    @GetMapping(path = "/{userId}")
-    @ResponseBody
-    public User getUser(@PathVariable int userId){
-        return userService.getUser(userId);
     }
 }

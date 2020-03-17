@@ -4,6 +4,8 @@ import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.dto.MapperDTO;
 import com.bets.friendlybet.entity.Bet;
 import com.bets.friendlybet.entity.User;
+import com.bets.friendlybet.exception.BetNotFoundException;
+import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.BetRepository;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +25,22 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<BetDTO> getAllBets(int userId) {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User: " + userId + " not found"));
         return mapperDTO.betEntityListToBetDtoList(betRepository.getAllByBetCreatorOrBetRival(user, user));
     }
 
     @Override
     public BetDTO getBet(int id) {
-        return mapperDTO.betEntityToBetDto(betRepository.getOne(id));
+        return mapperDTO.betEntityToBetDto(
+                betRepository.findById(id).orElseThrow(() ->
+                        new BetNotFoundException("Bet: " + id + " not found")));
     }
 
     @Override
     public List<BetDTO> getBetsByStatus(int userId, String status) {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User: " + userId + " not found"));
         return mapperDTO.betEntityListToBetDtoList(
                 betRepository.findByStatusAndBetCreatorOrStatusAndBetRival(status, user, status, user));
     }

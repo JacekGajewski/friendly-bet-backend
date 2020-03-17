@@ -2,8 +2,10 @@ package com.bets.friendlybet.controller;
 
 import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.service.BetService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,20 +30,22 @@ public class BetController {
         return betService.getBet(betId);
     }
 
+//    TODO: Change to @RequestParam
     @GetMapping("/bets/status/{betStatus}")
-    public @ResponseBody
-    List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {
+    @ResponseBody
+    public List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {
         return betService.getBetsByStatus(userId, betStatus);
     }
 
     @PutMapping("/bets")
-    public @ResponseBody
-    BetDTO updateBet(@RequestBody BetDTO bet) {
+    @ResponseBody
+    public BetDTO updateBet(@Valid @RequestBody BetDTO bet) {
         return betService.updateBet(bet);
     }
 
     @PostMapping("/bets")
-    public BetDTO saveBet(@RequestBody BetDTO newBet) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public BetDTO saveBet(@Valid @RequestBody BetDTO newBet) {
         return betService.saveBet(newBet);
     }
 

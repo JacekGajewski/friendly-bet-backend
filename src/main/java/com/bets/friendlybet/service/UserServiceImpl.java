@@ -3,10 +3,12 @@ package com.bets.friendlybet.service;
 import com.bets.friendlybet.dto.PasswordDTO;
 import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.entity.User;
-import com.bets.friendlybet.exception.ApiRequestException;
+import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.exception.BadPasswordException;
+import com.bets.friendlybet.exception.NotUniqueUsernameException;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +33,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(int userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new ApiRequestException("DUPA"));
+        return userRepository.findById(userId).orElseThrow(()
+                -> new UserNotFoundException("User: " + userId + " not found"));
     }
 
     @Override
     public User getUser(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUserByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User: " + username + " not found"));
     }
 
     @Override
@@ -55,6 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeUsername(int userId, String newUsername) {
+        if (getUser(newUsername) != null) {
+            throw new NotUniqueUsernameException("Username already exists");
+        }
         User user = getUser(userId);
         user.setUsername(newUsername);
     }
@@ -71,11 +78,6 @@ public class UserServiceImpl implements UserService {
         betService.deleteUserFromBets(userId);
         usersAuthoritiesService.deleteUserAuthorities(userId);
         userRepository.deleteById(userId);
-    }
-
-    @Override
-    public int getUserId(String username) {
-        return userRepository.findUserByUsername(username).getId();
     }
 
     private User userDtoToUserEntity(UserDTO userDTO) {

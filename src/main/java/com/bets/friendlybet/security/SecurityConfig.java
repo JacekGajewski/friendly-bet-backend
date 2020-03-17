@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .access("@webSecurity.checkUserId(authentication,#userId) AND hasAnyRole('STUDENT', 'ADMIN')")
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}")
                     .access("@webSecurity.checkUserId(authentication,#userId) AND hasAnyRole('STUDENT', 'ADMIN')")
-                .antMatchers(HttpMethod.PATCH, "/users/password/{userId}")
+                .antMatchers(HttpMethod.PATCH, "/users/{userId}/**")
                 .access("@webSecurity.checkUserId(authentication,#userId)")
                 .antMatchers(HttpMethod.POST, "/users", "/users/**")
                     .permitAll()

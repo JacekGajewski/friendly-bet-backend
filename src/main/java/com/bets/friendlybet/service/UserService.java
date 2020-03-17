@@ -23,6 +23,4 @@ public interface UserService {
     void createUser(UserDTO user);
 
     void deleteUser(int userId);
-
-    int getUserId(String username);
 }
