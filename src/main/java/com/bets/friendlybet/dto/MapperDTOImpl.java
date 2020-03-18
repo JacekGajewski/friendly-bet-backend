@@ -4,16 +4,20 @@ import com.bets.friendlybet.entity.Bet;
 import com.bets.friendlybet.repository.UserRepository;
 import com.bets.friendlybet.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class MapperDTOImpl implements MapperDTO{
 
-    private final UserRepository userRepository;
+    private final UserService userService;
+
+    public MapperDTOImpl(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
     public Bet betDtoToBetEntity(BetDTO betDTO) {
         return new Bet(
@@ -22,10 +26,9 @@ public class MapperDTOImpl implements MapperDTO{
                 betDTO.getContent(),
                 betDTO.getValue(),
                 betDTO.getStatus(),
-                userRepository.findById(betDTO.getCreatorId()).orElse(null),
-                userRepository.findUserByUsername(betDTO.getRivalName()));
+                userService.getUser(betDTO.getCreatorId()),
+                userService.getUser(betDTO.getRivalName()));
     }
-//    TODO: Injection circle
 
     public BetDTO betEntityToBetDto(Bet betEntity) {
         BetDTO betDTO = new BetDTO(

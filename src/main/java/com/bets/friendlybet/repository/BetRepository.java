@@ -11,9 +11,12 @@ import java.util.List;
 
 public interface BetRepository extends JpaRepository<Bet, Integer> {
 
-    List<Bet> getAllByBetCreatorOrBetRival(User creator, User rival);
+    @Query("SELECT b FROM Bet b WHERE b.betCreator.id = :creatorId OR b.betRival.id = :rivalId")
+    List<Bet> getAllByBetCreatorOrBetRival(@Param("creatorId") int creatorId, @Param("rivalId") int rivalId);
 
-    List<Bet> findByStatusAndBetCreatorOrStatusAndBetRival(String status, User creator, String theStatus, User rival);
+    @Query("SELECT b FROM Bet b WHERE b.status = :status AND (b.betCreator.id = :creatorId OR b.betRival.id = :rivalId)")
+    List<Bet> findUserBetsWithStatus(@Param("status") String status,
+                                     @Param("creatorId") int creatorId, @Param("rivalId") int rivalId);
 
     @Modifying
     @Query("UPDATE Bet SET bet_creator = null WHERE bet_creator = :userId")

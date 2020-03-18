@@ -21,6 +21,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -29,44 +32,45 @@ import static org.mockito.Mockito.when;
 public class BetServiceUnitTest {
 
     @Mock
-    UserRepository userRepository;
-
-    @Mock
     MapperDTOImpl mapperDTO;
 
     @Mock
     BetRepository betRepository;
 
     @InjectMocks
-    private BetServiceImpl betService = new BetServiceImpl(betRepository, userRepository, mapperDTO);
+    private BetServiceImpl betService;
 
     private BetDTO betDTO;
-    private  Bet bet;
-    private User creator;
-    private User rival;
+    private List<BetDTO> betsDTO;
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
-
-        creator = new User("johnny", "passwordJohnny");
-        rival = new User("jack", "passwordJack");
+        User creator = new User(1, "johnny", "passwordJohnny");
+        User rival = new User(2, "jack", "passwordJack");
 
         betDTO = new BetDTO(1, "SportsBet", "Manchester United is going to loose to Arsenal",
                 "One beer", "pending", 1, "jack");
-        bet = new Bet("SportsBet", "Manchester United is going to loose to Arsenal",
+        Bet bet = new Bet("SportsBet", "Manchester United is going to loose to Arsenal",
                 "One beer", "pending", creator, rival);
 
+        List<Bet> bets = new ArrayList<>();
+        bets.add(bet);
+
+        betsDTO = new ArrayList<>();
+        betsDTO.add(betDTO);
+
         when(mapperDTO.betDtoToBetEntity(betDTO)).thenReturn(bet);
+        when(mapperDTO.betEntityListToBetDtoList(bets)).thenReturn(betsDTO);
         when(mapperDTO.betEntityToBetDto(bet)).thenReturn(betDTO);
         when(betRepository.save(bet)).thenReturn(bet);
+        when(betRepository.getAllByBetCreatorOrBetRival(1, 1)).thenReturn(bets);
+        when(betRepository.findUserBetsWithStatus("pendind", 1, 1)).thenReturn(bets);
     }
 
     @Test
     public void sth() {
 
         assertThat(betService.saveBet(betDTO)).isEqualTo(betDTO);
-
+        assertThat(betService.getAllBets(1)).isEqualTo(betsDTO);
     }
-
 }

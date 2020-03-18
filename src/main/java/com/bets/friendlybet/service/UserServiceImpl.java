@@ -8,6 +8,7 @@ import com.bets.friendlybet.exception.BadPasswordException;
 import com.bets.friendlybet.exception.NotUniqueUsernameException;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String username) {
-        return userRepository.findUserByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException("User: " + username + " not found"));
+        return userRepository.findUserByUsername(username).orElse(null);
     }
 
     @Override

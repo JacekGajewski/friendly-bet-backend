@@ -5,13 +5,13 @@ import com.bets.friendlybet.dto.MapperDTO;
 import com.bets.friendlybet.entity.Bet;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.exception.BetNotFoundException;
-import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.BetRepository;
-import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,14 +20,12 @@ import java.util.List;
 public class BetServiceImpl implements BetService {
 
     private final BetRepository betRepository;
-    private final UserRepository userRepository;
     private final MapperDTO mapperDTO;
 
     @Override
     public List<BetDTO> getAllBets(int userId) {
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new UserNotFoundException("User: " + userId + " not found"));
-        return mapperDTO.betEntityListToBetDtoList(betRepository.getAllByBetCreatorOrBetRival(user, user));
+        List<Bet> allUserBets = betRepository.getAllByBetCreatorOrBetRival(userId, userId);
+        return mapperDTO.betEntityListToBetDtoList(allUserBets);
     }
 
     @Override
@@ -39,10 +37,8 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<BetDTO> getBetsByStatus(int userId, String status) {
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new UserNotFoundException("User: " + userId + " not found"));
         return mapperDTO.betEntityListToBetDtoList(
-                betRepository.findByStatusAndBetCreatorOrStatusAndBetRival(status, user, status, user));
+                betRepository.findUserBetsWithStatus(status, userId, userId));
     }
 
     @Override
@@ -72,6 +68,7 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public void deleteUserFromBets(int userId) {
+//        TODO: Circular dependency
         betRepository.deleteUserFromCreator(userId);
         betRepository.deleteUserFromRival(userId);
         deleteBetsIfItIsNotAttached();

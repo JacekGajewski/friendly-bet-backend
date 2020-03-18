@@ -17,4 +17,5 @@ public class FriendlyBetApplication {
 //		  2) Required, unique etc. for Entities
 //	      3) Validation
 //		  4) Tests
+//	      5) Store encrypted passwords in a database
 }
