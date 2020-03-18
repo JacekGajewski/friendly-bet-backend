@@ -68,6 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserDTO user) {
+        if (getUser(user.getUsername()) != null) {
+            throw new NotUniqueUsernameException("Username already exists");
+        }
         authorityService.doShit();
         User newUser = userDtoToUserEntity(user);
         authorityService.createAuthority(STUDENT, userRepository.save(newUser));
