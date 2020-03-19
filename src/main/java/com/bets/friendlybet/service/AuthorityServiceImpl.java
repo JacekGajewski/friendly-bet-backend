@@ -44,8 +44,7 @@ public class AuthorityServiceImpl implements AuthorityService{
 
     }
 
-    @Override
-    public void doShit() {
+    public void initAuthorities() {
         if (authorityRepository.getByName(STUDENT) != null){
             return;
         }

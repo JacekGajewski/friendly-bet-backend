@@ -1,25 +1,15 @@
 package com.bets.friendlybet.service;
 
 import com.bets.friendlybet.dto.BetDTO;
-import com.bets.friendlybet.dto.MapperDTO;
-import com.bets.friendlybet.dto.MapperDTOImpl;
 import com.bets.friendlybet.entity.Bet;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.repository.BetRepository;
-import com.bets.friendlybet.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class BetServiceUnitTest {
 
     @Mock
-    MapperDTOImpl mapperDTO;
+    BetMapper mapperDTO;
 
     @Mock
     BetRepository betRepository;

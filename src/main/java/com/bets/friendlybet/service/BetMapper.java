@@ -1,6 +1,8 @@
-package com.bets.friendlybet.dto;
+package com.bets.friendlybet.service;
 
+import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.entity.Bet;
+import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.UserRepository;
 import com.bets.friendlybet.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class MapperDTOImpl implements MapperDTO{
+@RequiredArgsConstructor
+public class BetMapper {
 
-    private final UserService userService;
-
-    public MapperDTOImpl(@Lazy UserService userService) {
-        this.userService = userService;
-    }
+    private final UserRepository userRepository;
 
     public Bet betDtoToBetEntity(BetDTO betDTO) {
         return new Bet(
@@ -26,8 +25,10 @@ public class MapperDTOImpl implements MapperDTO{
                 betDTO.getContent(),
                 betDTO.getValue(),
                 betDTO.getStatus(),
-                userService.getUser(betDTO.getCreatorId()),
-                userService.getUser(betDTO.getRivalName()));
+                userRepository.findById(betDTO.getCreatorId())
+                        .orElseThrow(() -> new UserNotFoundException("User not found")),
+                userRepository.findUserByUsername(betDTO.getRivalName())
+                        .orElseThrow(() -> new UserNotFoundException("User not found")));
     }
 
     public BetDTO betEntityToBetDto(Bet betEntity) {
