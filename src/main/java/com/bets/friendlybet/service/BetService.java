@@ -6,21 +6,13 @@ import java.util.List;
 
 public interface BetService {
 
-    List<BetDTO> getAllBets(int userId);
-
     BetDTO getBet(int id);
 
-    List<BetDTO> getBetsByStatus(int userId, String status);
+    List<BetDTO> getAllBets(int userId);
 
     BetDTO updateBet(BetDTO bet);
 
     BetDTO saveBet(BetDTO newBet);
 
-    void deleteBet(int userId, int betId);
-
-    void deleteUserFromBet(int userId, int betId);
-
-    void deleteUserFromBets(int userId);
-
-    void deleteBetsIfItIsNotAttached();
+    void deleteBet(int betId);
 }

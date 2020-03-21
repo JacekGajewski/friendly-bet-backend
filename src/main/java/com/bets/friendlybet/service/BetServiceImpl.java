@@ -20,8 +20,8 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<BetDTO> getAllBets(int userId) {
-        List<Bet> allUserBets = betRepository.getAllByBetCreatorOrBetRival(userId, userId);
-        return betMapper.betEntityListToBetDtoList(allUserBets);
+        List<Bet> allBets = betRepository.findAll();
+        return betMapper.betEntityListToBetDtoList(allBets);
     }
 
     @Override
@@ -32,14 +32,9 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<BetDTO> getBetsByStatus(int userId, String status) {
-        return betMapper.betEntityListToBetDtoList(
-                betRepository.findUserBetsWithStatus(status, userId, userId));
-    }
-
-    @Override
     public BetDTO updateBet(BetDTO betDTO) {
-        Bet bet = betRepository.save(betMapper.betDtoToBetEntity(betDTO));
+        Bet betEntity = betMapper.betDtoToBetEntity(betDTO);
+        Bet bet = betRepository.save(betEntity);
         return betMapper.betEntityToBetDto(bet);
     }
 
@@ -51,27 +46,7 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public void deleteBet(int userId, int betId) {
-        deleteUserFromBet(userId, betId);
-        betRepository.deleteBetIfItIsNotAttached(betId);
-    }
-
-    @Override
-    public void deleteUserFromBet(int userId, int betId) {
-        betRepository.deleteUserFromCreatorForBet(userId, betId);
-        betRepository.deleteUserFromRivalForBet(userId, betId);
-        deleteBetsIfItIsNotAttached();
-    }
-
-    @Override
-    public void deleteUserFromBets(int userId) {
-        betRepository.deleteUserFromCreator(userId);
-        betRepository.deleteUserFromRival(userId);
-        deleteBetsIfItIsNotAttached();
-    }
-
-    @Override
-    public void deleteBetsIfItIsNotAttached() {
-        betRepository.deleteBetsIfItIsNotAttached();
+    public void deleteBet(int betId) {
+        betRepository.deleteById(betId);
     }
 }

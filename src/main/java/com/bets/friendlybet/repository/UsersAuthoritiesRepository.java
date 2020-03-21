@@ -9,8 +9,4 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UsersAuthoritiesRepository extends JpaRepository<UsersAuthorities, UserAuthoritiesId> {
 
-    @Modifying
-    @Query("DELETE FROM UsersAuthorities WHERE id_user = :userId")
-    void deleteUsersAuthoritiesByIdUserIsContaining(int userId);
-
 }

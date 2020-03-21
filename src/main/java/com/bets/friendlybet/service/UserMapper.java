@@ -6,17 +6,24 @@ import com.bets.friendlybet.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
 
-
     public List<UserResponseDTO> usersListToUsersResponseDtoList(List<User> users) {
-        return null;
+        return users
+                .stream()
+                .map(this::userToUserResponseDto)
+                .collect(Collectors.toList());
     }
 
     public UserResponseDTO userToUserResponseDto(User user) {
-        return null;
+        if (user == null) return null;
+        return new UserResponseDTO(
+                user.getId(),
+                user.getUsername()
+        );
     }
 
     public User userDtoToUserEntity(UserDTO userDTO) {

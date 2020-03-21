@@ -2,26 +2,30 @@ package com.bets.friendlybet.controller;
 
 import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.service.BetService;
+import com.bets.friendlybet.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("user/{userId}")
 public class BetController {
 
     private BetService betService;
+    private UserService userService;
 
-    public BetController(BetService betService) {
+    public BetController(BetService betService, UserService userService) {
         this.betService = betService;
+        this.userService = userService;
     }
 
     @GetMapping("bets")
     public @ResponseBody
     List<BetDTO> getBets(@PathVariable int userId) {
-        return betService.getAllBets(userId);
+        return userService.getAllUserBets(userId);
     }
 
     @GetMapping("/bets/{betId}")
@@ -34,7 +38,7 @@ public class BetController {
     @GetMapping("/bets/status/{betStatus}")
     @ResponseBody
     public List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {
-        return betService.getBetsByStatus(userId, betStatus);
+        return userService.getBetsByStatus(userId, betStatus);
     }
 
     @PutMapping("/bets")
@@ -51,6 +55,6 @@ public class BetController {
 
     @DeleteMapping("/bets/{betId}")
     public void deleteBet(@PathVariable int userId, @PathVariable int betId) {
-        betService.deleteBet(userId, betId);
+        betService.deleteBet(betId);
     }
 }

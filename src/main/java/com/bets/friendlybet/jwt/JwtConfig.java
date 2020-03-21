@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "application.jwt")
 @Data
-@Component
+//@Component
 public class JwtConfig {
 
     private String secretKey;
     private String tokenPrefix;
-    private Integer tokenExpirationAfterDays;
+    private String tokenExpirationAfterDays;
 
     public String getAuthorizationHeader() {
         return HttpHeaders.AUTHORIZATION;

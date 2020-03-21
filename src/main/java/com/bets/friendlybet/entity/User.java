@@ -1,14 +1,13 @@
 package com.bets.friendlybet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,12 +34,12 @@ public class User {
     @OneToMany(mappedBy = "betCreator")
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Set<Bet> betsCreated;
+    private List<Bet> betsCreated;
 
-    @OneToMany(mappedBy = "betRival")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "id.user")
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Set<Bet> betsAccepted;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<UserBets> betsParticipated;
 
     public User() {
     }
