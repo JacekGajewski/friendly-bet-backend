@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -38,13 +39,13 @@ public class Bet {
     @ManyToOne
     @JoinColumn(name = "bet_creator",
             foreignKey = @ForeignKey(name = "fk",
-                    foreignKeyDefinition = "FOREIGN KEY (bet_creator) REFERENCES bet(bet_id) ON DELETE SET NULL"))
+                    foreignKeyDefinition = "FOREIGN KEY (bet_creator) REFERENCES users(user_id) ON DELETE SET NULL"))
     private User betCreator;
 
     @OneToMany(mappedBy = "id.bet")
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<UserBets> participants;
+    private List<UserBets> participants;
 
     public Bet() {
     }
@@ -60,22 +61,20 @@ public class Bet {
         this.value = value;
     }
 
-    public Bet(String title, String content, String value, String status, User betCreator, Set<UserBets> participants) {
+    public Bet(String title, String content, String value, String status, User betCreator) {
         this.title = title;
         this.content = content;
         this.value = value;
         this.status = status;
         this.betCreator = betCreator;
-        this.participants = participants;
     }
 
-    public Bet(Integer id, String title, String content, String value, String status, User betCreator, Set<UserBets> participants) {
+    public Bet(Integer id, String title, String content, String value, String status, User betCreator) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.value = value;
         this.status = status;
         this.betCreator = betCreator;
-        this.participants = participants;
     }
 }

@@ -2,6 +2,7 @@ package com.bets.friendlybet.service;
 
 import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.entity.Bet;
+import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,22 +17,30 @@ import java.util.stream.Collectors;
 public class BetMapper {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public Bet betDtoToBetEntity(BetDTO betDTO) {
-        return null;
-//        return new Bet(
-//                betDTO.getBetId(),
-//                betDTO.getTitle(),
-//                betDTO.getContent(),
-//                betDTO.getValue(),
-//                betDTO.getStatus(),
-//                userRepository.findById(betDTO.getCreatorId())
-//                        .orElseThrow(() -> new UserNotFoundException("User not found")),
-//                userRepository.findUserByUsername(betDTO.getRivalName())
-//                        .orElseThrow(() -> new UserNotFoundException("User not found")));
+        return new Bet(
+                betDTO.getBetId(),
+                betDTO.getTitle(),
+                betDTO.getContent(),
+                betDTO.getValue(),
+                betDTO.getStatus(),
+                userRepository.findById(betDTO.getCreatorId())
+                        .orElseThrow(() -> new UserNotFoundException("User not found"))
+        );
     }
 
     public BetDTO betEntityToBetDto(Bet betEntity) {
+        List<User> listOfParticipants = null;
+        if (betEntity.getParticipants() != null) {
+            listOfParticipants = betEntity.getParticipants()
+                    .stream()
+                    .map(p -> p.getId().getUser())
+                    .collect(Collectors.toList());
+        }
+
+
         BetDTO betDTO = new BetDTO(
                 betEntity.getId(),
                 betEntity.getTitle(),
@@ -39,15 +48,13 @@ public class BetMapper {
                 betEntity.getValue(),
                 betEntity.getStatus(),
                 0,
-                ""
+                userMapper.usersListToUsersResponseDtoList(listOfParticipants)
         );
 
         if (betEntity.getBetCreator() != null) {
             betDTO.setCreatorId(betEntity.getBetCreator().getId());
         }
-//        if (betEntity.getBetRival() != null) {
-//            betDTO.setRivalName(betEntity.getBetRival().getUsername());
-//        }
+
         return betDTO;
     }
 

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public List<UserResponseDTO> usersListToUsersResponseDtoList(List<User> users) {
+        if (users == null) return null;
         return users
                 .stream()
                 .map(this::userToUserResponseDto)

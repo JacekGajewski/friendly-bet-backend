@@ -17,6 +17,8 @@ public class BetServiceImpl implements BetService {
 
     private final BetRepository betRepository;
     private final BetMapper betMapper;
+    private final UserBetsService userBetsService;
+    private final UserService userService;
 
     @Override
     public List<BetDTO> getAllBets(int userId) {
@@ -33,6 +35,7 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public BetDTO updateBet(BetDTO betDTO) {
+//        TODO: Update participants
         Bet betEntity = betMapper.betDtoToBetEntity(betDTO);
         Bet bet = betRepository.save(betEntity);
         return betMapper.betEntityToBetDto(bet);
@@ -40,9 +43,17 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public BetDTO saveBet(BetDTO newBet) {
+//        TODO: Get user instead of doing query two times
         Bet s = betMapper.betDtoToBetEntity(newBet);
-        Bet save = betRepository.save(s);
-        return betMapper.betEntityToBetDto(save);
+        Bet betSaved = betRepository.save(s);
+
+        if (newBet.getRivalsName()!= null){
+            newBet.getRivalsName()
+                    .forEach(p-> userBetsService.saveUserBets(userService.getUserEntity(p.getUserId()), betSaved));
+        }
+        userBetsService.saveUserBets(userService.getUserEntity(newBet.getCreatorId()), betSaved);
+
+        return betMapper.betEntityToBetDto(betSaved);
     }
 
     @Override
