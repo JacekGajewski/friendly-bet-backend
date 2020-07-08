@@ -47,7 +47,7 @@ public class BetServiceImpl implements BetService {
         Bet s = betMapper.betDtoToBetEntity(newBet);
         Bet betSaved = betRepository.save(s);
 
-        if (newBet.getRivalsName()!= null){
+        if (newBet.getRivalsName() != null){
             newBet.getRivalsName()
                     .forEach(p-> userBetsService.saveUserBets(userService.getUserEntity(p.getUserId()), betSaved));
         }
