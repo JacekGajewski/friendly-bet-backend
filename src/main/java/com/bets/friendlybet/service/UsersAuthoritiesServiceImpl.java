@@ -17,9 +17,4 @@ public class UsersAuthoritiesServiceImpl implements UsersAuthoritiesService {
     public UsersAuthorities save(UsersAuthorities usersAuthorities) {
         return usersAuthoritiesRepository.save(usersAuthorities);
     }
-
-    @Override
-    public void deleteUserAuthorities(int userId) {
-        usersAuthoritiesRepository.deleteUsersAuthoritiesByIdUserIsContaining(userId);
-    }
 }

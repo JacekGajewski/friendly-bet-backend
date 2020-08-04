@@ -7,6 +7,4 @@ public interface UsersAuthoritiesService {
 
     UsersAuthorities save(UsersAuthorities usersAuthorities);
 
-    void deleteUserAuthorities(int userId);
-
 }

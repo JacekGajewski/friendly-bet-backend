@@ -2,8 +2,10 @@ package com.bets.friendlybet.controller;
 
 import com.bets.friendlybet.dto.PasswordDTO;
 import com.bets.friendlybet.dto.UserDTO;
+import com.bets.friendlybet.dto.UserResponseDTO;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,23 +15,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping(path = "/{userId}")
     @ResponseBody
-    public User getUser(@PathVariable int userId) {
+    public UserResponseDTO getUser(@PathVariable int userId) {
         return userService.getUser(userId);
     }
 

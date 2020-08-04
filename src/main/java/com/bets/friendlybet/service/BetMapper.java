@@ -1,23 +1,23 @@
-package com.bets.friendlybet.dto;
+package com.bets.friendlybet.service;
 
+import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.entity.Bet;
+import com.bets.friendlybet.entity.User;
+import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.UserRepository;
-import com.bets.friendlybet.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class MapperDTOImpl implements MapperDTO{
+@RequiredArgsConstructor
+public class BetMapper {
 
-    private final UserService userService;
-
-    public MapperDTOImpl(@Lazy UserService userService) {
-        this.userService = userService;
-    }
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public Bet betDtoToBetEntity(BetDTO betDTO) {
         return new Bet(
@@ -26,27 +26,35 @@ public class MapperDTOImpl implements MapperDTO{
                 betDTO.getContent(),
                 betDTO.getValue(),
                 betDTO.getStatus(),
-                userService.getUser(betDTO.getCreatorId()),
-                userService.getUser(betDTO.getRivalName()));
+                userRepository.findById(betDTO.getCreatorId())
+                        .orElseThrow(() -> new UserNotFoundException("User not found"))
+        );
     }
 
     public BetDTO betEntityToBetDto(Bet betEntity) {
+        List<User> listOfParticipants = null;
+        if (betEntity.getParticipants() != null) {
+            listOfParticipants = betEntity.getParticipants()
+                    .stream()
+                    .map(p -> p.getId().getUser())
+                    .collect(Collectors.toList());
+        }
+
+
         BetDTO betDTO = new BetDTO(
-                betEntity.getBet_id(),
+                betEntity.getId(),
                 betEntity.getTitle(),
                 betEntity.getContent(),
                 betEntity.getValue(),
                 betEntity.getStatus(),
                 0,
-                ""
+                userMapper.usersListToUsersResponseDtoList(listOfParticipants)
         );
 
         if (betEntity.getBetCreator() != null) {
             betDTO.setCreatorId(betEntity.getBetCreator().getId());
         }
-        if (betEntity.getBetRival() != null) {
-            betDTO.setRivalName(betEntity.getBetRival().getUsername());
-        }
+
         return betDTO;
     }
 
@@ -55,5 +63,12 @@ public class MapperDTOImpl implements MapperDTO{
                 .stream()
                 .map(this::betEntityToBetDto)
                 .collect(Collectors.toList());
+    }
+
+    public Set<BetDTO> betEntityListToBetDtoList(Set<Bet> entityBets) {
+        return entityBets
+                .stream()
+                .map(this::betEntityToBetDto)
+                .collect(Collectors.toSet());
     }
 }

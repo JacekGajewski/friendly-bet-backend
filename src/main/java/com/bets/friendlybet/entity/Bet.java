@@ -1,12 +1,16 @@
 package com.bets.friendlybet.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -18,7 +22,7 @@ public class Bet {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "bet_id")
-    private int bet_id;
+    private Integer id;
 
     @Column(name = "title")
     private String title;
@@ -33,12 +37,15 @@ public class Bet {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "bet_creator")
+    @JoinColumn(name = "bet_creator",
+            foreignKey = @ForeignKey(name = "fk",
+                    foreignKeyDefinition = "FOREIGN KEY (bet_creator) REFERENCES users(user_id) ON DELETE SET NULL"))
     private User betCreator;
 
-    @ManyToOne
-    @JoinColumn(name = "bet_rival")
-    private User betRival;
+    @OneToMany(mappedBy = "id.bet")
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<UserBets> participants;
 
     public Bet() {
     }
@@ -54,22 +61,20 @@ public class Bet {
         this.value = value;
     }
 
-    public Bet(String title, String content, String value, String status, User betCreator, User betRival) {
+    public Bet(String title, String content, String value, String status, User betCreator) {
         this.title = title;
         this.content = content;
         this.value = value;
         this.status = status;
         this.betCreator = betCreator;
-        this.betRival = betRival;
     }
 
-    public Bet(int bet_id, String title, String content, String value, String status, User betCreator, User betRival) {
-        this.bet_id = bet_id;
+    public Bet(Integer id, String title, String content, String value, String status, User betCreator) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.value = value;
         this.status = status;
         this.betCreator = betCreator;
-        this.betRival = betRival;
     }
 }

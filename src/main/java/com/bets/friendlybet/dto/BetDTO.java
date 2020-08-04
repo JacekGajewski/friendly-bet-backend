@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class BetDTO {
@@ -19,15 +20,15 @@ public class BetDTO {
     private String value;
     private String status;
     private int creatorId;
-    private String rivalName;
+    private List<UserResponseDTO> rivalsName;
 
-    public BetDTO(int betId, String title, String content, String value, String status, int creatorId, String rivalName) {
+    public BetDTO(int betId, String title, String content, String value, String status, int creatorId,  List<UserResponseDTO> rivalsName) {
         this.betId = betId;
         this.title = title;
         this.content = content;
         this.value = value;
         this.status = status;
         this.creatorId = creatorId;
-        this.rivalName = rivalName;
+        this.rivalsName = rivalsName;
     }
 }

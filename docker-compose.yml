@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  psql:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: friendly_bet
+    volumes:
+      - C:\Users\gajewski\Documents\docker\friendly-bet:/var/lib/postgresql/data
+
+  friendly-bet:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: friendly-bet
+    ports:
+      - '8070:8070'
+    environment:
+      DB_URL: jdbc:postgresql://psql/friendly_bet
+      DB_USERNAME: postgres
+      DB_PASSWORD: admin
+      SECRET_KEY: secuhukgfhjlkhkghfxghfhkjlghdfhdghkgfkfxjgrxktyvkhgvlutfjyrzjyrxlutltxykzreKey9
+      TOKEN_PREFIX: Bearer 
+      TOKEN_EXP_DAYS: 14

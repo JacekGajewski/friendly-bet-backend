@@ -3,7 +3,6 @@ package com.bets.friendlybet.entity;
 
 import com.bets.friendlybet.security.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
