@@ -64,7 +64,7 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
         System.out.println(jwtConfig.getTokenPrefix());
         System.out.println(jwtConfig.getSecretKey());
         System.out.println(jwtConfig.getAuthorizationHeader());
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        response.setHeader("Access-Control-Allow-Origin", "https://friendly-bet.herokuapp.com");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 //        response.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH, OPTIONS");
         response.setHeader("Access-Control-Max-Age", "3600");
