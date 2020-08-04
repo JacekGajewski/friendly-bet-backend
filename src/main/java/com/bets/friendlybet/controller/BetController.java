@@ -3,6 +3,7 @@ package com.bets.friendlybet.controller;
 import com.bets.friendlybet.dto.BetDTO;
 import com.bets.friendlybet.service.BetService;
 import com.bets.friendlybet.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +13,11 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("user/{userId}")
+@RequiredArgsConstructor
 public class BetController {
 
-    private BetService betService;
-    private UserService userService;
-
-    public BetController(BetService betService, UserService userService) {
-        this.betService = betService;
-        this.userService = userService;
-    }
+    private final BetService betService;
+    private final UserService userService;
 
     @GetMapping("bets")
     public @ResponseBody
@@ -34,7 +31,6 @@ public class BetController {
         return betService.getBet(betId);
     }
 
-//    TODO: Change to @RequestParam
     @GetMapping("/bets/status/{betStatus}")
     @ResponseBody
     public List<BetDTO> getBetsByStatus(@PathVariable int userId, @PathVariable String betStatus) {

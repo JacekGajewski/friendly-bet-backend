@@ -5,6 +5,7 @@ import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.dto.UserResponseDTO;
 import com.bets.friendlybet.entity.User;
 import com.bets.friendlybet.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
