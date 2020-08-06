@@ -72,6 +72,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiException, wrongPassword);
     }
 
+    @ExceptionHandler(BetException.class)
+    public ResponseEntity<Object> handleBetException(BetNotFoundException e) {
+
+        HttpStatus wrongPassword = HttpStatus.BAD_REQUEST;
+
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                wrongPassword,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(apiException, wrongPassword);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {

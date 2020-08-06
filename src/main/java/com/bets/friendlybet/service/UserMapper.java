@@ -3,13 +3,18 @@ package com.bets.friendlybet.service;
 import com.bets.friendlybet.dto.UserDTO;
 import com.bets.friendlybet.dto.UserResponseDTO;
 import com.bets.friendlybet.entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponseDTO> usersListToUsersResponseDtoList(List<User> users) {
         if (users == null) return null;
@@ -31,7 +36,7 @@ public class UserMapper {
         return new User(
                 userDTO.getUserId(),
                 userDTO.getUsername(),
-                userDTO.getPassword()
+                passwordEncoder.encode(userDTO.getPassword())
         );
     }
 }

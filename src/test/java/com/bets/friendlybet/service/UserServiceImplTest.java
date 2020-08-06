@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +35,9 @@ class UserServiceImplTest {
     @Mock
     BetMapper betMapper;
 
+    @Mock
+    PasswordEncoder passwordEncoder;
+
     UserService userService;
 
     Optional<User> optionalUser1;
@@ -49,7 +53,8 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, authorityService, userMapper, betMapper);
+        userService = new UserServiceImpl(userRepository,
+                authorityService, userMapper, betMapper, passwordEncoder);
 
         username1 = "username";
         username2 = "john";

@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(JwtConfig.class)
 public class FriendlyBetApplication {
 
 	public static void main(String[] args) {
@@ -17,5 +16,4 @@ public class FriendlyBetApplication {
 //		  2) Required, unique etc. for Entities
 //	      3) Validation
 //		  4) Tests
-//	      5) Store encrypted passwords in a database
 }

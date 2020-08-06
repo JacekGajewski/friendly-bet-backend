@@ -12,6 +12,7 @@ import com.bets.friendlybet.exception.NotUniqueUsernameException;
 import com.bets.friendlybet.exception.UserNotFoundException;
 import com.bets.friendlybet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final AuthorityService authorityService;
     private final UserMapper userMapper;
     private final BetMapper betMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserEntity(int userId) {
@@ -68,10 +70,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(int userId, PasswordDTO passwordDTO) {
         User user = getUserEntity(userId);
-        if (!user.getPassword().equals(passwordDTO.getOldPassword())) {
+        if (passwordEncoder.matches(user.getPassword(), passwordDTO.getOldPassword())) {
             throw new BadPasswordException("Wrong password");
         }
-        user.setPassword(passwordDTO.getNewPassword());
+        user.setPassword(passwordEncoder.encode(passwordDTO.getNewPassword()));
     }
 
     @Override

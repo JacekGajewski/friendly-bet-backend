@@ -13,7 +13,7 @@ public class BetDTO {
     private int betId;
 
     @NotBlank(message = "Please provide a bet title")
-    @Size(min = 3, max = 50, message = "Bet title contain between 6-30 characters")
+    @Size(min = 6, max = 30, message = "Bet title contain between 6-30 characters")
     private String title;
 
     private String content;

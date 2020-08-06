@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApplicationUserDaoService implements ApplicationUserDAO{
 
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     @Override
@@ -27,13 +26,13 @@ public class ApplicationUserDaoService implements ApplicationUserDAO{
 
     private List<ApplicationUser> getApplicationUsers()
     {
-        List<ApplicationUser> collect = userRepository.findAll().stream()
+        return userRepository.findAll().stream()
                 .map(user -> new ApplicationUser(
                         user.getAuthorities().stream()
                                 .map(authority -> authority.getId().getAuthority().getName().getGrantedAuthorities())
                                 .flatMap(Set::stream)
                                 .collect(Collectors.toSet()),
-                        passwordEncoder.encode(user.getPassword()),
+                        user.getPassword(),
                         user.getUsername(),
                         true,
                         true,
@@ -41,6 +40,5 @@ public class ApplicationUserDaoService implements ApplicationUserDAO{
                         true,
                         user.getId())).
                         collect(Collectors.toList());
-        return collect;
     }
 }
