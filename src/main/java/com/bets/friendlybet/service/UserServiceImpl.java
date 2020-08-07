@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(int userId, PasswordDTO passwordDTO) {
         User user = getUserEntity(userId);
-        if (passwordEncoder.matches(user.getPassword(), passwordDTO.getOldPassword())) {
+        if (!passwordEncoder.matches(passwordDTO.getOldPassword(), user.getPassword())) {
             throw new BadPasswordException("Wrong password");
         }
         user.setPassword(passwordEncoder.encode(passwordDTO.getNewPassword()));
